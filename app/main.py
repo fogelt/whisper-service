@@ -1,19 +1,24 @@
-from fastapi import FastAPI, WebSocket
-from app.api.websocket import handle_whisper_websocket
-from app.services.whisper import WhisperService
-from app.core.config import settings
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.transcribe import router as transcribe_router
 
-app = FastAPI(title=settings.APP_NAME)
+app = FastAPI(title="Whisper Swedish API")
 
-whisper_service = WhisperService(
-    model_size=settings.MODEL_SIZE, 
-    device=settings.DEVICE
+# 1. Define allowed origins
+# For "CORS *", you use ["*"]
+origins = ["*"]
+
+# 2. Add the middleware to the app instance
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows GET, POST, OPTIONS, etc.
+    allow_headers=["*"],  # Allows all headers (Content-Type, etc.)
 )
+
+app.include_router(transcribe_router, tags=["Transcription"])
 
 @app.get("/")
 async def root():
-    return {"status": "online", "model": settings.MODEL_SIZE}
-
-@app.websocket("/ws/whisper")
-async def websocket_route(websocket: WebSocket):
-    await handle_whisper_websocket(websocket, whisper_service)
+    return {"status": "online"}
