@@ -6,7 +6,7 @@ from app.services.whisper_service import WhisperService
 from app.utils.audio import process_webm_chunk
 
 router = APIRouter()
-whisper = WhisperService(model_size=settings.MODEL_SIZE, device=settings.DEVICE)
+whisper = WhisperService()
 executor = ThreadPoolExecutor(max_workers=settings.WORKER_COUNT)
 
 def sync_transcribe(audio_bytes):

@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     APP_NAME: str = "Whisper Swedish API"
-    MODEL_SIZE: str = os.getenv("MODEL_SIZE", "small")
+    MODEL_ID: str = os.getenv("MODEL_ID", "KBLab/kb-whisper-small")
     DEVICE: str = os.getenv("DEVICE", "cuda")  # "cuda" or "cpu"
     COMPUTE_TYPE: str = os.getenv("COMPUTE_TYPE", "int8")
     
